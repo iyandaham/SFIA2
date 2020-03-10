@@ -1,0 +1,53 @@
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField, PasswordField, BooleanField, IntegerField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from application.models import Users
+from flask_login import current_user
+
+class PostForm(FlaskForm):
+        rating_value = StringField('rating_value', validators =[DataRequired(), Length(min=4, max=100)])
+        rest_id = IntegerField('rest_id', validators =[DataRequired(), Length(min=4, max=5000)])
+        submit = SubmitField('Post!')
+
+class RegistrationForm(FlaskForm):
+        first_name = StringField('First Name', validators =[DataRequired(), Length(min=4, max=30)])
+        last_name = StringField('Last Name', validators =[DataRequired(), Length(min=4, max=30)])
+        email = StringField('Email',validators = [DataRequired(),Email()])
+        password = PasswordField('Password',validators = [ DataRequired(),])
+        confirm_password = PasswordField('Confirm Password',validators = [DataRequired(),EqualTo('password')])
+        submit = SubmitField('Sign up')
+        def validate_email(self,email):
+                user = Users.query.filter_by(email=email.data).first()
+
+                if user:
+                        raise ValidationError('Email already in use')
+class RatingForm(FlaskForm):
+	Rating_value = StringField('Rating_value',validators=[DataRequired()])
+	submit = SubmitField('Submit Rating!')
+
+class RestaurantForm(FlaskForm):
+	rest_name = StringField('rest_name',validators = [DataRequired()])
+	meal = StringField('meal',validators=[DataRequired()])
+	location = StringField('locaton',validators =[DataRequired()])
+	rest_id = IntegerField('rest_id',validators =[DataRequired()])
+	submit = SubmitField('Submit Restaurant')
+
+
+class LoginForm(FlaskForm):
+
+        email = StringField('Email',validators=[DataRequired(), Email()])
+        password = PasswordField('Password',validators=[DataRequired()])
+        remember = BooleanField('Remember Me')
+        submit = SubmitField('Login')
+
+class UpdateAccountForm(FlaskForm):
+        first_name = StringField('First Name',validators=[DataRequired(), Length(min=4, max=30)])
+        last_name = StringField('Last Name', validators =[DataRequired(), Length(min=4, max=30)])
+        email = StringField('Email',validators=[DataRequired(), Email()])
+        submit = SubmitField('Update')
+        def validate_email(self,email):
+                if email.data != current_user.email:
+                        user = Users.query.filter_by(email=email.data).first()
+                        if user:
+                                raise ValidationError('Email already in use')
+
