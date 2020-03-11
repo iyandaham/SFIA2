@@ -20,8 +20,8 @@
 <td>{{rest.location }}</td>
 <td>{{ rating_value }}</td>
 </tr>
-<a href="{{ url_for('updaterestaurant',id=rest.id}}"><button type>Update this Restaurant</button>
-<a href="{{ url_for('delete_rest_id', id=id) }}"><button type>Delete this Restaurant</button></a>
+<td><a href="{{ url_for('delete_rest_id',rest_id =rest.id)}}"><button type>Delete this Restauraunt</button></a></td>
+<td><a href="{{ url_for('update', rest_id = rest.id)}}"><button type>Update this Restaurant</button></a></td>
 </table>
 <br>
 {% endfor %}
@@ -49,14 +49,14 @@
                                         {% endfor %}
                                 </div>
                         {% endif %}
-                        <div class="form-group">
+			<div class="form-group">
                                 {{ form.location.label }}
                                 {{ form.location }}
                                 {% if form.location.errors %}
                                         <div class="error">
                                                 {% for error in form.location.errors %}
                                                         <span>{{ error }}</span>
-						{% endfor %}
+                                                {% endfor %}
                                         </div>
                                 {% endif %}
                         </div>
@@ -66,5 +66,5 @@
                         </div>
                 </form>
         </div>
-
 {% endblock %}
+

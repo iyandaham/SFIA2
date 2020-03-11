@@ -11,11 +11,31 @@
                 </div>
          {% endfor %}
 	<br>
-{%for rate in Rating %}
-<p>{{ rating_value }}<P>
-<span>Restaurant name<i> {{ rest_name }} </span>
-<span>Meal<i> {{ meal }} </span>
-<span>location<i> {{ location }} </span>
-{% endfor %} 
-{% endblock %}
 
+
+<p> Current Restaurants <p>
+{% for rest in restaurants %}
+<div>
+	<table border="1">
+	<tr>
+	<th>ID</th>
+	<th>RESTAURANT NAME</th>
+	<th>MEAL</th>
+	<th>Location</th>
+	<th>Rating</th>
+	</tr>
+	<tr>	
+	<td>{{ rest.id }}</td>
+	<td>{{ rest.rest_name}}</td>
+	<td>{{ rest.meal }}</td>
+	<td>{{ rest.location }}</td>
+	<td>{{ rating_value.id }}</td>
+
+	<td><a href="{{ url_for('delete_rest_id',rest_id =rest.id)}}"><button type>Delete this Restauraunt</button></a></td>
+	<td><a href="{{ url_for('update', rest_id = rest.id)}}"><button type>Update this Restaurant</button></a></td>
+	</tr>
+	</table>
+</div>
+{% endfor %}
+<br>
+{% endblock %}

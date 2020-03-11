@@ -35,13 +35,17 @@ def account_delete():
         db.session.commit()
         return redirect(url_for('register'))
 
-@app.route("/restaurant/delete/<id>", methods=["GET","POST"])
+@app.route("/restaurant/delete/<rest_id>", methods=["GET","POST"])
 @login_required
-def delete_rest_id(id):
-		restaurant = Restaurant.query.filter_by(id=id).first()
+def delete_rest_id(rest_id):
+		rating = Rating.query.filter_by(rest_id = rest_id).first()
+		db.session.delete(rating)
+		db.session.commit()
+		restaurant = Restaurant.query.filter_by(id=rest_id).first()
 		db.session.delete(restaurant)
 		db.session.commit()
 		return redirect(url_for('home'))
+
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -110,19 +114,22 @@ def restaurantall ():
 
 
 
-@app.route('/updaterestaurant/<rest_id>', methods=['GET','POST'])
-def updaterestaurant(rest_id):
-	restaurants = Restaurant.query.filter_by(id=int(rest_id)).first()
+@app.route('/update/<rest_id>', methods=['GET','POST'])
+def update(rest_id):
+	restaurants = Restaurant.query.filter_by(id=rest_id).first()
 	form = UpdateRestaurantForm()
 	if form.validate_on_submit():
-		restaurants.rest_name =UpdateRestaurantForm.rest_name.data
-		restaurants.meal = UpdateRestaurantForm.meal.data
-		restaurants.location = UpdateRestaurantForm.location.data
+		restaurants.rest_name = form.rest_name.data
+		restaurants.meal = form.meal.data
+		restaurants.location = form.location.data
 		db.session.commit()
-		return redirect(url_for('rating', rest_id = restaurants.id, form = form))
+		rating = Rating.query.filter_by(rest_id = rest_id).first()
+		db.session.delete(rating)
+		db.session.commit()
+		return redirect(url_for('rating', rest_id = restaurants.id))
 	else:
 		print(form.errors)
-	return render_template('restaurantupdate.html', title='Restuarant', restaurants = restaurants, form = form)
+	return render_template('restaurant.html', title='Restuarant', restaurants = restaurants, form = form)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -154,9 +161,10 @@ def post():
 @app.route('/')
 @app.route('/home')
 def home():
+	restaurants = Restaurant.query.all()
 	posts = Post.query.all()
-	ratings = Rating.query.all()
-	return render_template("home.html", title='Home', posts=posts, ratings=ratings)
+	rating = Rating.query.all()
+	return render_template("home.html", title='Home', posts=posts, rating_value=rating, restaurants=restaurants)
 
 @app.route('/about')
 def About():

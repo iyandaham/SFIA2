@@ -1,31 +1,6 @@
 {% extends "layout.html" %}
 {% block body_content %}
 <div>
-<p> Current Restaurants <p>
-{% for rest in restaurants %}
-<table border="1">
-<tr>
-<th>ID</th>
-<th>RESTAURANT NAME</th>
-<th>MEAL</th>
-<th>Location</th>
-<th>Rating</th>
-</tr>
-<tr>
-<td>{{rest.id }}</td>
-<td>{{rest.rest_name}}</td>
-<td>{{rest.meal }}</td>
-<td>{{rest.location }}</td>
-<td>{{ rating_value }}</td>	
-</tr>
-<form action="/updaterestaurant/{{rest.id}}">
-                <button type="submit">Update this Restaurant</button>
-        </form>
-        <a href="{{ url_for('delete_rest_id', id=id) }}"><button type>Delete this Restaurant</button></a>
-</table>
-<br>
-{% endfor %}
-</div>
 <p>Enter A Restaurant </p>
         <div class="form-group">
 		<form method='POST' action=''>
